@@ -62,6 +62,8 @@ func hiddenValues(key string, value map[string]any, ch config.ChannelsConfig) {
 		value["app_secret"] = ch.Feishu.AppSecret.String()
 		value["encrypt_key"] = ch.Feishu.EncryptKey.String()
 		value["verification_token"] = ch.Feishu.VerificationToken.String()
+	case "xiaozhi":
+		value["token"] = ch.Xiaozhi.Token.String()
 	}
 }
 

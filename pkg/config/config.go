@@ -294,6 +294,7 @@ type ChannelsConfig struct {
 	Weixin     WeixinConfig     `json:"weixin"      yaml:"weixin,omitempty"`
 	Pico       PicoConfig       `json:"pico"        yaml:"pico,omitempty"`
 	PicoClient PicoClientConfig `json:"pico_client" yaml:"pico_client,omitempty"`
+	Xiaozhi    XiaozhiConfig    `json:"xiaozhi"     yaml:"-"`
 	IRC        IRCConfig        `json:"irc"         yaml:"irc,omitempty"`
 }
 
@@ -528,6 +529,17 @@ type PicoClientConfig struct {
 	PingInterval int                 `json:"ping_interval,omitempty" yaml:"-"`
 	ReadTimeout  int                 `json:"read_timeout,omitempty"  yaml:"-"`
 	AllowFrom    FlexibleStringSlice `json:"allow_from"              yaml:"-"               env:"PICOCLAW_CHANNELS_PICO_CLIENT_ALLOW_FROM"`
+}
+
+// XiaozhiConfig configures the Xiaozhi WebSocket channel, which acts as a
+// xiaozhi-compatible server for ESP32-based voice devices (e.g. DS-01).
+type XiaozhiConfig struct {
+	Enabled        bool                `json:"enabled"                     yaml:"-"               env:"PICOCLAW_CHANNELS_XIAOZHI_ENABLED"`
+	Token          SecureString        `json:"token,omitzero"              yaml:"token,omitempty" env:"PICOCLAW_CHANNELS_XIAOZHI_TOKEN"`
+	MaxConnections int                 `json:"max_connections,omitempty"   yaml:"-"`
+	AllowFrom      FlexibleStringSlice `json:"allow_from"                  yaml:"-"               env:"PICOCLAW_CHANNELS_XIAOZHI_ALLOW_FROM"`
+	PingInterval   int                 `json:"ping_interval,omitempty"     yaml:"-"`
+	ReadTimeout    int                 `json:"read_timeout,omitempty"      yaml:"-"`
 }
 
 type IRCConfig struct {

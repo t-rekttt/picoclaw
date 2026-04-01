@@ -4,7 +4,7 @@
 
 ## 💬 Chat Apps
 
-Talk to your picoclaw through Telegram, Discord, WhatsApp, Matrix, QQ, DingTalk, LINE, WeCom, Feishu, Slack, IRC, OneBot, MaixCam, or Pico (native protocol)
+Talk to your picoclaw through Telegram, Discord, WhatsApp, Matrix, QQ, DingTalk, LINE, WeCom, Feishu, Slack, IRC, OneBot, MaixCam, Xiaozhi, or Pico (native protocol)
 
 > **Note**: Channels that rely on HTTP callbacks share a single Gateway HTTP server (`gateway.host`:`gateway.port`, default `127.0.0.1:18790`). Socket/stream-based channels such as Feishu, DingTalk, and WeCom do not rely on the shared webhook server for inbound delivery.
 
@@ -24,6 +24,7 @@ Talk to your picoclaw through Telegram, Discord, WhatsApp, Matrix, QQ, DingTalk,
 | **IRC**              | ⭐⭐ Medium        | Server + TLS configuration                            | [Docs](#irc)                                                                                                     |
 | **OneBot**           | ⭐⭐ Medium        | NapCat/Go-CQHTTP compatible, community ecosystem      | [Docs](channels/onebot/README.md)                                                                            |
 | **MaixCam**          | ⭐ Easy            | Hardware integration channel for Sipeed AI cameras    | [Docs](channels/maixcam/README.md)                                                                           |
+| **Xiaozhi**          | ⭐⭐ Medium        | ESP32 voice devices (DS-01), Opus audio + ASR/TTS    | [Docs](#xiaozhi)                                                                                                |
 | **Pico**             | ⭐ Easy            | Native PicoClaw protocol channel                      |                                                                                                                  |
 
 <a id="telegram"></a>
@@ -569,5 +570,51 @@ Install and run a OneBot v11 compatible QQ bot framework. Enable its WebSocket s
 ```bash
 picoclaw gateway
 ```
+
+</details>
+
+<a id="xiaozhi"></a>
+<details>
+<summary><b>Xiaozhi (ESP32 Voice Devices)</b></summary>
+
+PicoClaw supports Xiaozhi-compatible ESP32 voice devices (e.g., DS-01) via WebSocket. The channel acts as a Xiaozhi-compatible server, handling Opus audio streaming, ASR transcription, and TTS synthesis with session persistence.
+
+**1. Configure**
+
+```json
+{
+  "channels": {
+    "xiaozhi": {
+      "enabled": true,
+      "token": "YOUR_DEVICE_TOKEN",
+      "max_connections": 10,
+      "ping_interval": 30,
+      "read_timeout": 60,
+      "allow_from": []
+    }
+  }
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `enabled` | Enable/disable the Xiaozhi channel |
+| `token` | Authentication token for device connections |
+| `max_connections` | Maximum concurrent device connections |
+| `ping_interval` | WebSocket ping interval in seconds |
+| `read_timeout` | Read timeout in seconds |
+| `allow_from` | Allow-list of device IDs (empty = all allowed) |
+
+**2. Device Connection**
+
+Devices connect via WebSocket to the `/xiaozhi/v1/chat` endpoint. Session persistence is maintained via the `Device-Id` header in WebSocket upgrade requests.
+
+**3. Run**
+
+```bash
+picoclaw gateway
+```
+
+The Xiaozhi channel will accept WebSocket connections on the configured host:port. Devices should send audio frames and receive transcription + TTS synthesis responses.
 
 </details>

@@ -421,6 +421,10 @@ func (m *Manager) initChannels(channels *config.ChannelsConfig) error {
 		m.initChannel("pico_client", "Pico Client")
 	}
 
+	if channels.Xiaozhi.Enabled {
+		m.initChannel("xiaozhi", "Xiaozhi")
+	}
+
 	if channels.IRC.Enabled && channels.IRC.Server != "" {
 		m.initChannel("irc", "IRC")
 	}
